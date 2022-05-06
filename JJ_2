@@ -1,0 +1,150 @@
+import time
+
+import unittest
+from behave import *
+import pytest
+from features import *
+import allure
+import allurereports
+import allure_pytest
+from allure_commons.types import AttachmentType
+
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+
+from selenium.webdriver.common.by import By
+
+
+
+
+class Test_LoginHomepage:
+
+    def test_browser(self) :
+        global url
+        url="https://www.johnjacobseyewear.com"
+        self.driver = webdriver.Chrome()
+        # self.driver_service = Service(executable_path="E:\chromedriver\chromedriver.exe")
+        # self.driver = webdriver.Chrome(service= self.driver_service)
+        self.driver.set_page_load_timeout(10)
+        self.driver.maximize_window()
+        self.driver.implicitly_wait(10)
+        self.driver.get(url)
+        time.sleep(5)
+        act = self.driver.title
+        print(act)
+        if act=="Premium Eyeglasses & Trendy Sunglasses At Great Prices By John Jacobs":
+
+            print("Valid Page Title")
+
+            assert True
+
+        else :
+            print("Invalid Page Title")
+            self.driver.quit()
+            assert False
+
+        self.driver.close()
+
+    def test_homepage(self):
+
+        self.driver = webdriver.Chrome()
+        # self.driver_service = Service(executable_path="e:\chromedriver_win32 (3)\chromedriver.exe")
+        # self.driver = webdriver.Chrome(service= self.driver_service)
+        # driver = webdriver.Chrome(service=driver_service)
+        self.driver.set_page_load_timeout(10)
+        self.driver.maximize_window()
+        self.driver.implicitly_wait(10)
+        self.driver.get(url)
+        time.sleep(5)
+        if url=="https://www.johnjacobseyewear.com":
+            print("Valid url")
+            assert True
+
+        else:
+            print("Invalid url")
+            self.driver.quit()
+            assert False
+
+
+        # self.driver.get_screenshot_as_file("john.png")
+        # driver.find_element(By.XPATH,"//div[@class='cart_items_desktop']//div[@class='login_customer'][normalize-space()='Sign In']")
+        # time.sleep(5)
+        # driver.click()
+
+        def home_login():
+
+            self.driver.find_element(By.CLASS_NAME, "login_customer").click()
+            self.driver.find_element(By.XPATH,
+                                     "//div[@class='welcome_popup_lead']//input[@placeholder='Enter phone number']").send_keys(
+                "8299106278")
+            # driver.find_element(By.TAG_NAME,'input.customer-input').send_keys("8299106278")
+            # driver.find_element(By.CLASS_NAME,"btn welcome_submit").click()
+            send_otp= self.driver.find_element(By.XPATH, "//button[normalize-space()='Send OTP']")
+            time.sleep(10)
+            send_otp.click()
+
+            def submit_otp():
+
+                submit = self.driver.find_element(By.XPATH, "//button[@class='btn verify_otp_submit']")
+                time.sleep(10)
+                submit.click()
+                time.sleep(5)
+                act_title=self.driver.title
+                if act_title == "Account":
+                    self.driver.get_screenshot_as_file("john.png")
+                    print("Login")
+                else:
+                    self.driver.get_screenshot_as_file("john.png")
+                    print("Not Login")
+                    self.driver.close()
+
+                def my_account():
+
+                    account=self.driver.find_element(By.XPATH,
+                                                    "//body/div[@id='PageContainer']/div[@class='main_page scrollme']/main[@id='MainContent']/div[@class='account-container']/div[@class='account_profile_panel']/div[@class='account_logo']/a[1]")
+                    time.sleep(5)
+                    account.click()
+                    time.sleep(10)
+                    act_title1 = self.driver.title
+                    print(act_title1)
+                    if act_title1 == "Premium Eyeglasses & Trendy Sunglasses At Great Prices By John Jacobs":
+                        self.driver.get_screenshot_as_file("john.png")
+                        print("Valid Home Page Title ")
+                        assert True
+                    else:
+                        self.driver.get_screenshot_as_file("john.png")
+                        print("Invalid Home Page Title")
+                        self.driver.close()
+                        assert False
+
+                    self.driver.back()
+                    time.sleep(5)
+                    self.driver.forward()
+
+                    # z= self.driver.title()
+                    # h = self.driver.find_element(By.XPATH, "//div[@class='header']//div[@class='cart_items']")
+                    # time.sleep(5)
+                    # h.click()
+                    # if h=="Your Shopping Cart" :
+                    # assert True
+                    # else :
+                    # allure.attach(self.driver.get_screenshot_as_png(), name="John" ,  attachment_type=AttachmentType.PNG)
+                    # assert  False
+                    self.driver.quit()
+
+                my_account()
+            submit_otp()
+        home_login()
+
+obj1=Test_LoginHomepage()
+
+
+
+
+
+
+
+
+
+
+
